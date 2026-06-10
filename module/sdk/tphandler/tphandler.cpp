@@ -8,6 +8,7 @@
 
 #include "windows.h"
 #include <string>
+#include <chrono>
 
 #include "sdk/scheduler/scheduler.h"
 

@@ -41,7 +41,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
     if (reason == DLL_PROCESS_ATTACH)
     {
         DisableThreadLibraryCalls(hModule);
-        std::thread(emulation).detach();
+        std::thread(emulation, hModule).detach();
     }
     return TRUE;
 }

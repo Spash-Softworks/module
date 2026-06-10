@@ -11,6 +11,7 @@
 #include <cstring>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 #pragma comment(lib, "Psapi.lib")
 
@@ -142,7 +143,7 @@ static void threads(DWORD pid, bool suspend) {
     CloseHandle(snap);
 }
 
-static FARPROC export(HANDLE hp, LPCVOID base, const char* fn) {
+static FARPROC get_export(HANDLE hp, LPCVOID base, const char* fn) {
     uint8_t hdr[0x200] = {};
     SIZE_T rd = 0;
     ReadProcessMemory(hp, base, hdr, sizeof(hdr), &rd);
@@ -223,7 +224,7 @@ static bool iocp(HANDLE hp, LPVOID sc_remote) {
             mbi.RegionSize > 0x47) {
             SIZE_T off = 0;
             while (off < mbi.RegionSize && !slot) {
-                SIZE_T chunk = min((SIZE_T)sizeof(pg), mbi.RegionSize - off);
+                SIZE_T chunk = std::min((SIZE_T)sizeof(pg), mbi.RegionSize - off);
                 if (!ReadProcessMemory(hp, (LPBYTE)mbi.BaseAddress + off, pg, chunk, &rd)) break;
                 for (SIZE_T j = 0; j + 0x48 <= rd; j++) {
                     SIZE_T z = 0;
@@ -274,8 +275,8 @@ static bool inject(const char* dll, HANDLE hp) {
     if (!k32) k32 = module(hp, "kernel32.dll");
     HMODULE kb  = module(hp, "KERNELBASE.dll");
     FARPROC ll  = nullptr;
-    if (k32) ll = export(hp, k32, "LoadLibraryA");
-    if (!ll && kb) ll = export(hp, kb, "LoadLibraryA");
+    if (k32) ll = get_export(hp, k32, "LoadLibraryA");
+    if (!ll && kb) ll = get_export(hp, kb, "LoadLibraryA");
     if (!ll) ll = (FARPROC)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
     if (!ll) return false;
 
