@@ -52,6 +52,7 @@ uintptr_t taskscheduler_t::get_job_by_name(uintptr_t base, const std::string& na
         return 0;
     }
 
+	uintptr_t result = 0;
     for (uintptr_t job_ptr = jobs_start; job_ptr < jobs_end; job_ptr += 0x10)
     {
         uintptr_t job = *reinterpret_cast<uintptr_t*>(job_ptr);
@@ -59,17 +60,14 @@ uintptr_t taskscheduler_t::get_job_by_name(uintptr_t base, const std::string& na
             continue;
         }
 
-        const char* job_name = *reinterpret_cast<const char**>(job + TaskScheduler::JobName);
-        if (!job_name) {
-            continue;
-        }
-
+        const std::string& job_name = *reinterpret_cast<const std::string*>(job + TaskScheduler::JobName);
         if (job_name == name) {
-            return job;
+			result = job;
+			break;
         }
     }
 
-    return 0;
+    return result;
 }
 
 uintptr_t taskscheduler_t::get_scriptcontext(uintptr_t datamodel)
