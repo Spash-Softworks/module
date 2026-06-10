@@ -43,6 +43,6 @@ void tphandler_t::init(uintptr_t base)
 	print(0, "");
 
     auto now = std::chrono::steady_clock::now();
-    auto end = std::chrono::duration_cast<std::chrono::seconds>(now - begin).count();
+    auto end = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin).count();
     print(0, "%s loaded in %llds", "femboyware", end);
 }
