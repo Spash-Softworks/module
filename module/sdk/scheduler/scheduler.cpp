@@ -128,5 +128,5 @@ int taskscheduler_t::get_gameloaded(uintptr_t datamodel)
 		return 0;
 	}
 
-	return *reinterpret_cast<int*>(datamodel + ClassOffsets::DataModel::GameLoaded);
+	return *reinterpret_cast<bool*>(datamodel + ClassOffsets::DataModel::GameLoaded);
 }
