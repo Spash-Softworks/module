@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 project(femboyware CXX)
 
+set(MODULE_NAME "rat")
+set(LOADER_NAME "loader")
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -38,6 +41,8 @@ target_link_libraries(module PRIVATE
     user32
 )
 
+set_target_properties(module PROPERTIES OUTPUT_NAME ${MODULE_NAME})
+
 # shitty injector
 add_executable(loader
     inj/entry.cpp
@@ -54,6 +59,8 @@ target_link_libraries(loader PRIVATE
     user32
     psapi
 )
+
+set_target_properties(loader PROPERTIES OUTPUT_NAME ${LOADER_NAME})
 
 # msvc flags
 if(MSVC)
