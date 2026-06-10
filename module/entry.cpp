@@ -22,8 +22,6 @@
 
 void emulation(HMODULE hModule)
 {
-    auto begin = std::chrono::steady_clock::now();
-
     uintptr_t base 		= reinterpret_cast<uintptr_t>(GetModuleHandleA(nullptr));
 
 	tphandler->init(base);

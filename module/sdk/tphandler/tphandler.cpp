@@ -13,6 +13,8 @@
 
 void tphandler_t::init(uintptr_t base)
 {
+	auto begin = std::chrono::steady_clock::now();
+
 	uintptr_t datamodel = 		taskscheduler->get_datamodel(base);
     uintptr_t placeid 	= 		taskscheduler->get_placeid(datamodel);
 	uintptr_t scriptcontext = 	taskscheduler->get_scriptcontext(datamodel);
