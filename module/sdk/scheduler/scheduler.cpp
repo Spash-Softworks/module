@@ -59,24 +59,9 @@ uintptr_t taskscheduler_t::get_job_by_name(uintptr_t base, const std::string& na
 
 uintptr_t taskscheduler_t::get_scriptcontext(uintptr_t datamodel)
 {
-	uintptr_t children_ptr = get<uintptr_t>(datamodel + Instance::Children);
-    uintptr_t children_start = get<uintptr_t>(children_ptr);
-    uintptr_t children_end = get<uintptr_t>(children_ptr + Instance::ChildrenEnd);
 
-	if (!children_start || !children_end) return 0;
-	
-	for (uintptr_t current = children_start; current < children_end; current += 0x10)
-	{
-		uintptr_t child = get<uintptr_t>(current);
-        uintptr_t class_desc = get<uintptr_t>(child + Instance::ClassDescriptor);
-        const char* class_name = get<const char*>(class_desc + ClassDescriptor::ClassName);
-
-		if (class_name && std::string(class_name) == "ScriptContext") {
-		    return child;
-		}
-	}
-
-	return 0;
+	uintptr_t children = get<uintptr_t>(datamodel, Instance::Children);
+	return get<uintptr_t>(get<uintptr_t>(children), ClassOffsets::DataModel::ScriptContext);
 }
 
 int taskscheduler_t::get_gameloaded(uintptr_t datamodel)
