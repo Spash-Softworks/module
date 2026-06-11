@@ -29,10 +29,19 @@ namespace Instance {
     inline constexpr uintptr_t ChildrenStart = 0x78;
     inline constexpr uintptr_t ChildrenEnd = 0x8;
     inline constexpr uintptr_t ChildrenStride = 0x10;
+    inline constexpr uintptr_t Parent = 0x60;
 }
 
-namespace ChildrenVector {
-    inline constexpr uintptr_t Begin = 0x0;
+namespace ExtraSpace {
+    inline constexpr uintptr_t Identity     = 0x28; // TODO: verify
+    inline constexpr uintptr_t Capabilities = 0x30; // TODO: verify
+}
+
+namespace ScriptContext {
+    inline constexpr uintptr_t RequireBypass = 0x9E1;
+}
+
+namespace ChildrenVector {    inline constexpr uintptr_t Begin = 0x0;
     inline constexpr uintptr_t End = 0x8;
     inline constexpr uintptr_t Stride = 0x10;
 }

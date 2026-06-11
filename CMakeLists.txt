@@ -22,6 +22,7 @@ add_library(module SHARED
     module/entry.cpp
     module/sdk/scheduler/scheduler.cpp
     module/sdk/tphandler/tphandler.cpp
+    module/sdk/execution/execution.cpp
 )
 
 target_include_directories(module PRIVATE
@@ -39,9 +40,39 @@ target_compile_definitions(module PRIVATE
 target_link_libraries(module PRIVATE
     kernel32
     user32
+    luau
 )
 
 set_target_properties(module PROPERTIES OUTPUT_NAME ${MODULE_NAME})
+
+# luau
+set(LUAU_DIR ${CMAKE_SOURCE_DIR}/module/libs/luau)
+
+file(GLOB_RECURSE LUAU_SOURCES
+    ${LUAU_DIR}/VM/src/*.cpp
+    ${LUAU_DIR}/Compiler/src/*.cpp
+    ${LUAU_DIR}/Ast/src/*.cpp
+    ${LUAU_DIR}/Bytecode/src/*.cpp
+    ${LUAU_DIR}/Common/src/*.cpp
+    ${LUAU_DIR}/CodeGen/src/*.cpp
+)
+
+add_library(luau STATIC ${LUAU_SOURCES})
+
+target_include_directories(luau PUBLIC
+    ${LUAU_DIR}/VM/include
+    ${LUAU_DIR}/Compiler/include
+    ${LUAU_DIR}/Ast/include
+    ${LUAU_DIR}/Bytecode/include
+    ${LUAU_DIR}/Common/include
+    ${LUAU_DIR}/CodeGen/include
+)
+
+target_compile_definitions(luau PRIVATE
+    WIN32
+    NOMINMAX
+    WIN32_LEAN_AND_MEAN
+)
 
 # shitty injector
 add_executable(loader
@@ -64,7 +95,7 @@ set_target_properties(loader PROPERTIES OUTPUT_NAME ${LOADER_NAME})
 
 # msvc flags
 if(MSVC)
-    foreach(tgt module loader)
+    foreach(tgt module loader luau)
         target_compile_options(${tgt} PRIVATE /W3 /MP /EHsc)
         set_target_properties(${tgt} PROPERTIES
             MSVC_RUNTIME_LIBRARY "MultiThreaded"

@@ -64,6 +64,7 @@ namespace Offsets {
         const uintptr_t coclose = REBASE(0x444A7A0);
         const uintptr_t lengthFieldBasedFrameDecoder = REBASE(0x69AA048);
         const uintptr_t AttachRobloxExtraSpace = REBASE(0x1CC3FD0);
+        const uintptr_t OpcodeTable = 0x5F42790;
         const uintptr_t task_spawn = REBASE(0x1DC9BC0);
         const uintptr_t task_cancel = REBASE(0x1DC89E0);
         const uintptr_t task_delay = REBASE(0x1DC90F0);
