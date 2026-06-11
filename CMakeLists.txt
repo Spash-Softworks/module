@@ -22,6 +22,7 @@ add_library(module SHARED
     module/entry.cpp
     module/sdk/scheduler/scheduler.cpp
     module/sdk/tphandler/tphandler.cpp
+	module/sdk/coms/coms.cpp
 )
 
 target_include_directories(module PRIVATE

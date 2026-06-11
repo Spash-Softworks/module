@@ -16,7 +16,7 @@
 #include "sdk/update/offsets.hpp"
 #include "sdk/update/fflags.hpp"
 #include "sdk/update/cfg.hpp"
-
+#include "sdk/coms/coms.h"
 
 
 
@@ -40,6 +40,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
     {
         DisableThreadLibraryCalls(hModule);
         std::thread(emulation, hModule).detach();
+		server->setup();
     }
     return TRUE;
 }

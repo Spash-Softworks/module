@@ -96,3 +96,8 @@ int taskscheduler_t::get_gameloaded(uintptr_t datamodel)
 {
 	return get<uint8_t>(datamodel + ClassOffsets::DataModel::GameLoaded) != 0;
 }
+
+void taskscheduler_t::execute(std::string& script)
+{
+	//ah
+}

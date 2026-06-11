@@ -21,7 +21,7 @@ void tphandler_t::init(uintptr_t base)
 	uintptr_t scriptcontext = 	taskscheduler->get_scriptcontext(datamodel);
 	int gameloaded = 			taskscheduler->get_gameloaded(datamodel);
 
-	auto jobs = taskscheduler->get_all_jobs(base);
+	auto jobs = 				taskscheduler->get_all_jobs(base);
 
 	using printfunc = void(__cdecl*)(int, const char*, ...);
     auto print = reinterpret_cast<printfunc>(base + Offsets::Internal_Offsets::Print);
