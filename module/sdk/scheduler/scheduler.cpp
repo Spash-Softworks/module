@@ -57,6 +57,34 @@ uintptr_t taskscheduler_t::get_job_by_name(uintptr_t base, const std::string& na
     return 0;
 }
 
+std::vector<std::pair<std::string, uintptr_t>> taskscheduler_t::get_all_jobs(uintptr_t base)
+{
+    std::vector<std::pair<std::string, uintptr_t>> jobs;
+
+    uintptr_t scheduler = get<uintptr_t>(base + TaskScheduler::Pointer);
+    uintptr_t jobs_start = get<uintptr_t>(scheduler + TaskScheduler::JobStart);
+    uintptr_t jobs_end = get<uintptr_t>(scheduler + TaskScheduler::JobEnd);
+
+    if (!jobs_start || !jobs_end || jobs_end < jobs_start) return jobs;
+
+    for (uintptr_t job_ptr = jobs_start; job_ptr < jobs_end; job_ptr += 0x10)
+    {
+        uintptr_t job = get<uintptr_t>(job_ptr);
+        if (!job) {
+            continue;
+        }
+
+        const std::string& job_name = *reinterpret_cast<const std::string*>(job + TaskScheduler::JobName);
+        if (job_name.empty()) {
+            continue;
+        }
+
+        jobs.emplace_back(job_name, job);
+    }
+
+    return jobs;
+}
+
 uintptr_t taskscheduler_t::get_scriptcontext(uintptr_t datamodel)
 {
 
