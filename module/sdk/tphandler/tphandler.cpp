@@ -32,10 +32,10 @@ void tphandler_t::init(uintptr_t base)
     print(1, "hyperion has been deleted");
 
     print(0, "");
-    print(0, "datamodel @ 0x%llX", 		datamodel);
-    print(0, "placeid @ 0x%llX", 		placeid);
-    print(0, "scriptcontext @ 0x%llX", 	scriptcontext);
-	print(0, "gameloaded @ %d", 		gameloaded);
+    print(0, "datamodel @ 0x%llX", 					datamodel);
+    print(0, "placeid @ 0x%llX", 					placeid);
+    print(0, "scriptcontext @ 0x%llX", 				scriptcontext);
+	print(0, "gameloaded @ %d", 					gameloaded);
     print(0, "");
 	print(0, "WaitingHybridScriptsJob @ 0x%llX", 	hybridscripts);
     print(0, "Heartbeat @ 0x%llX", 					heartbeat);
@@ -44,5 +44,5 @@ void tphandler_t::init(uintptr_t base)
 
     auto now = std::chrono::steady_clock::now();
     auto end = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin).count();
-    print(0, "%s loaded in %llds", "femboyware", end);
+    print(0, "%s loaded in %lldms", "femboyware", end);
 }
