@@ -11,6 +11,17 @@
 #include "windows.h"
 #include <string>
 
+// RAII
+struct CleanupFailures
+{
+    HANDLE h;
+    ~CleanupFailures()
+    {
+        DisconnectNamedPipe(h);
+        CloseHandle(h);
+    }
+};
+
 static bool read(HANDLE hPipe, void* Buffer, DWORD Size)
 {
     DWORD TotalRead = 0;
@@ -35,33 +46,33 @@ void host()
             Sleep(100);
             continue;
         }
-
+        ///
+        CleanupFailures cleanup{ hPipe };
+        ///
         BOOL Connection = ConnectNamedPipe(hPipe, nullptr) || GetLastError() == ERROR_PIPE_CONNECTED;
         if (!Connection)
         {
-            CloseHandle(hPipe);
             continue;
         }
 
         uint32_t script_buf = 0;
         if (!read(hPipe, &script_buf, sizeof(script_buf)) || script_buf == 0 || script_buf > (8 * 1024 * 1024))
         {
-            CloseHandle(hPipe);
             continue;
         }
 
         std::vector<char> Buffer(script_buf);
         if (!read(hPipe, Buffer.data(), script_buf))
         {
-            CloseHandle(hPipe);
             continue;
         }
 
         std::string Script(Buffer.data(), script_buf);
-        taskscheduler->execute(Script);
-
-        DisconnectNamedPipe(hPipe);
-        CloseHandle(hPipe);
+        
+        try {
+            taskscheduler->execute(Script);
+        }
+        catch (...) {}
     }
 }
 
