@@ -12,10 +12,10 @@
 #include <string>
 
 // RAII
-struct CleanupFailures
+struct PipeGuard
 {
     HANDLE h;
-    ~CleanupFailures()
+    ~PipeGuard()
     {
         DisconnectNamedPipe(h);
         CloseHandle(h);
@@ -47,7 +47,7 @@ void host()
             continue;
         }
         ///
-        CleanupFailures cleanup{ hPipe };
+        PipeGuard guard{ hPipe };
         ///
         BOOL Connection = ConnectNamedPipe(hPipe, nullptr) || GetLastError() == ERROR_PIPE_CONNECTED;
         if (!Connection)
